@@ -124,45 +124,36 @@ public:
     }
 
     template <typename DocumentPredicate>
-    vector<Document> FindTopDocuments(const string& raw_query,
-                                        DocumentPredicate document_predicate) const {
-        if(IsValidQuery(raw_query)==false){
-            throw std::invalid_argument("invalid character int findtop");
-        }else{
-            const Query query = ParseQuery(raw_query);
-            auto matched_documents = FindAllDocuments(query, document_predicate);
-            sort(matched_documents.begin(), matched_documents.end(),
-                 [](const Document& lhs, const Document& rhs) {
-                     if (abs(lhs.relevance - rhs.relevance) < 1e-6) {
-                         return lhs.rating > rhs.rating;
-                     } else {
-                         return lhs.relevance > rhs.relevance;
-                     }
-                 });
-            if (matched_documents.size() > MAX_RESULT_DOCUMENT_COUNT) {
-                matched_documents.resize(MAX_RESULT_DOCUMENT_COUNT);
-            }
-            return matched_documents;
+    vector<Document> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const {
+        Query query = ParseQuery(raw_query);
+        auto matched_documents = FindAllDocuments(query, document_predicate);
+
+        sort(matched_documents.begin(), matched_documents.end(),
+            [](const Document& lhs, const Document& rhs) {
+                const double EPSILON = 1e-6;
+                if (abs(lhs.relevance - rhs.relevance) < EPSILON) {
+                    return lhs.rating > rhs.rating;
+                }
+                else {
+                    return lhs.relevance > rhs.relevance;
+                }
+            });
+        if (matched_documents.size() > MAX_RESULT_DOCUMENT_COUNT) {
+            matched_documents.resize(MAX_RESULT_DOCUMENT_COUNT);
         }
+
+        return matched_documents;
     }
 
     vector<Document> FindTopDocuments(const string& raw_query, DocumentStatus status) const {
-        if(IsValidQuery(raw_query)==false) {
-            throw std::invalid_argument("invalid character int findtop");
-        }else{
-            return FindTopDocuments(
-                raw_query, [status](int document_id, DocumentStatus document_status, int rating) {
-                    return document_status == status;
-                });
-        }
+        return FindTopDocuments(raw_query,
+            [&status](int document_id, DocumentStatus new_status, int rating) {
+                return new_status == status;
+            });
     }
 
     vector<Document> FindTopDocuments(const string& raw_query) const {
-        if(IsValidQuery(raw_query)==false) {
-            throw std::invalid_argument("invalid character int findtop");
-        }else{
-            return FindTopDocuments(raw_query, DocumentStatus::ACTUAL);
-        }
+        return FindTopDocuments(raw_query, DocumentStatus::ACTUAL);
     }
 
     int GetDocumentCount() const {
@@ -320,17 +311,10 @@ private:
         });
     }
 
-    static bool IsValidQuery(const string& raw_query) {
-        if(IsValidWord(raw_query)==false) {
-            return false;
-        }
-        for (int i = 0; i < raw_query.size(); ++i) {
-            if (raw_query[i] == '-' || raw_query[raw_query.size()-1]=='-') {
-                if (raw_query[i + 1] == '-' || raw_query[i + 1] == ' ') {
-                    return false;
-                }
-            }
-        }
-        return true;
+  static bool IsValidQuery(const string& word) {
+        // A valid word must not contain special characters
+        return none_of(word.begin(), word.end(), [](char c) {
+            return c >= '\0' && c < ' ';
+            });
     }
 };
