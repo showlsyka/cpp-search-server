@@ -8,14 +8,6 @@
 class RequestQueue {
 public:
     explicit RequestQueue(const SearchServer& search_server);
-
-       template <typename DocumentPredicate>
-    std::vector<Document> AddFindRequest(const std::string& raw_query, DocumentPredicate document_predicate) {
-        auto result = search_server_.FindTopDocuments(raw_query, document_predicate);
-        AddRequest(result.size());
-        return result;
-        // напишите реализацию
-    }
     
     std::vector<Document> AddFindRequest(const std::string& raw_query, DocumentStatus status) {
         auto result = search_server_.FindTopDocuments(raw_query, status);
@@ -47,3 +39,12 @@ private:
     const static int min_in_day_ = 1440;
     void AddRequest(int num_request);
 };
+
+template <typename DocumentPredicate>
+    std::vector<Document> AddFindRequest(const std::string& raw_query, DocumentPredicate document_predicate) {
+        const SearchServer& search_server_;
+        auto result = search_server_.FindTopDocuments(raw_query, document_predicate);
+        AddRequest(result.size());
+        return result;
+        // напишите реализацию
+    }
