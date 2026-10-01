@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include <cstdint>
 
 #include "search_server.h"
 #include "document.h"
