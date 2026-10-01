@@ -22,7 +22,7 @@ public:
     }
 
     bool AreSynonyms(const string& first_word, const string& second_word) const {
-        // Напишите недостающий код
+
         if(synonyms_.count(first_word) > 0){
             auto word1 = synonyms_.at(first_word);
             for(const auto& w : word1 ){
@@ -63,7 +63,7 @@ void TestAreSynonyms() {
     assert(synonyms.AreSynonyms("music", "melody") == false);
     assert(synonyms.AreSynonyms("melody", "tune") == true);
 }
-    // Напишите недостающий код
+
 
 
 void TestSynonyms() {

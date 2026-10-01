@@ -13,14 +13,14 @@ public:
         auto result = search_server_.FindTopDocuments(raw_query, status);
         AddRequest(result.size());
         return result;
-        // напишите реализацию
+
     }
 
     std::vector<Document> AddFindRequest(const std::string& raw_query) {
         auto result = search_server_.FindTopDocuments(raw_query);
         AddRequest(result.size());
         return result;
-        // напишите реализацию
+
     }
     
     int GetNoResultRequests() const;
@@ -29,7 +29,7 @@ private:
     struct QueryResult {
         int req;
         uint64_t time;
-        // определите, что должно быть в структуре
+
     };
 
     std::deque<QueryResult> requests_;
@@ -46,5 +46,5 @@ template <typename DocumentPredicate>
         auto result = search_server_.FindTopDocuments(raw_query, document_predicate);
         AddRequest(result.size());
         return result;
-        // напишите реализацию
+
     }

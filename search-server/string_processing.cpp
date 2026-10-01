@@ -1,4 +1,4 @@
-//Вставьте сюда своё решение из урока «Очередь запросов» темы «Стек, очередь, дек».‎
+
 #include "string_processing.h"
 
 std::vector<std::string> SplitIntoWords(const std::string& text) {

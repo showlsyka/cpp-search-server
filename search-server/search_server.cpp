@@ -1,4 +1,4 @@
-//Вставьте сюда своё решение из урока «Очередь запросов» темы «Стек, очередь, дек».‎
+
 #include "search_server.h"
 
 void SearchServer::AddDocument(int document_id, const std::string& document, DocumentStatus status, const std::vector<int>& ratings) {
@@ -69,7 +69,7 @@ bool SearchServer::IsStopWord(const std::string& word) const {
 }
 
 bool SearchServer::IsValidWord(const std::string& word) {
-    // A valid word must not contain special characters
+
     return none_of(word.begin(), word.end(), [](char c) {
         return c >= '\0' && c < ' ';
         });

@@ -1,5 +1,5 @@
-//Вставьте сюда своё решение из урока «Очередь запросов» темы «Стек, очередь, дек».‎
-//Вставьте сюда своё решение из урока «Очередь запросов» темы «Стек, очередь, дек».‎
+
+
 #include "request_queue.h"
 
     RequestQueue::RequestQueue(const SearchServer& search_server) :
@@ -10,7 +10,7 @@
     
     int RequestQueue::GetNoResultRequests() const {
         return min_in_day_ - count_req_;
-        // напишите реализацию
+
     }
 
     void RequestQueue::AddRequest(int num_request) {
